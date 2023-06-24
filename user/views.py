@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
+from django.contrib.auth.models import User
 
-# Create your views here.
+from .models import Profile
+from .serializers import ProfileSerializer,UserSerializer
+
+class ProfileList(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
+class ProfileDetail(RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
