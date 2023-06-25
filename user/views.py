@@ -11,6 +11,8 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsProfileOwnerOrReadOnly]
+    lookup_field = 'username'
+    
     
 class RegisterUser(generics.CreateAPIView):
     queryset = User.objects.all()
