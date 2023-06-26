@@ -37,6 +37,10 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         account.set_password(self.validated_data['password'])
         account.save()
         
+        # Create a profile for the user
+        profile = Profile(user=account)
+        profile.save()
+        
         return account
 
     
