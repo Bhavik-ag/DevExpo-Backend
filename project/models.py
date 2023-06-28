@@ -20,7 +20,7 @@ class Project(models.Model):
     views = models.IntegerField(default=0)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
-    image_1 = models.ImageField(upload_to='project_images', blank=True)
+    image_1 = models.ImageField(upload_to='project_images', blank=False)
     image_2 = models.ImageField(upload_to='project_images', blank=True)
     image_3 = models.ImageField(upload_to='project_images', blank=True)
     image_4 = models.ImageField(upload_to='project_images', blank=True)
@@ -30,4 +30,14 @@ class Project(models.Model):
     def __str__(self):
         return self.title
     
-    
+class Review(models.Model):    
+    message = models.CharField(max_length=100, blank=False)    
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='reviews')
+    review_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_user')
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return self.review_user.username + ' ' + self.message.split(' ')[0]
+

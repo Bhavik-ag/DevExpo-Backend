@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterUserSerializer(serializers.ModelSerializer):
     
     # Make email compulsory
-    email = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
     
     class Meta:
         model = User
@@ -30,7 +30,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     def save(self):
         
         if User.objects.filter(email = self.validated_data['email']).exists():
-            raise serializers.ValidationError({'error': 'Email already exists'})
+            raise serializers.ValidationError({'email': 'Email already exists'})
         
         account = User(email=self.validated_data['email'], username= self.validated_data['username'])
         
