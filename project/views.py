@@ -5,6 +5,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from .models import Project, Review
 from .serializers import ProjectSerializer, ProjectDetailSerializer, ReviewSerializer
@@ -13,6 +14,9 @@ from .permissions import IsProjectUserOrReadOnly
 class ProjectList(generics.ListAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    filter_backends = [OrderingFilter, SearchFilter]
+    ordering_fields = ['created']
+    search_fields = ['title', 'description', 'owner__username']
     
 class ProjectCreate(generics.CreateAPIView):
     queryset = Project.objects.all()

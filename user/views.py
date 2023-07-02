@@ -84,7 +84,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsProfileOwnerOrReadOnly]
-    lookup_field = 'username'
+    lookup_field = 'username'   
     
 class RegisterUser(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -130,8 +130,7 @@ class CustomTokenVerifyView(TokenVerifyView):
             return response
         except:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        
-        
+             
 class LogoutUser(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         response = Response(status=status.HTTP_204_NO_CONTENT)
