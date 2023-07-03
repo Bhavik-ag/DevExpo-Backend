@@ -2,6 +2,8 @@ from rest_framework import generics
 from django.contrib.auth.models import User
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -13,7 +15,7 @@ from rest_framework_simplejwt.views import (
 
 from user.models import Profile
 from .serializers import UserSerializer, RegisterUserSerializer
-from .permissions import IsProfileOwnerOrReadOnly
+from .permissions import IsProfileOwnerOrReadOnly, IsProfileUserOrReadOnly
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -80,12 +82,55 @@ class CustomTokenRefreshView(TokenRefreshView):
             
         return response
     
-class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+class ProfileDetail(generics.RetrieveDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsProfileOwnerOrReadOnly]
+    permission_classes = [IsProfileUserOrReadOnly]
     lookup_field = 'username'   
     
+class ProfileUpdate(APIView):   
+    parser_classes = [MultiPartParser, FormParser]
+    permission_classes = [IsProfileOwnerOrReadOnly]
+
+    def patch(self, request, username, format=None):
+        user = User.objects.get(username=username)
+        profile = Profile.objects.get(user=user)
+        
+        try:
+        
+            if request.data.get('first_name'):
+                user.first_name = request.data['first_name']
+            
+            if request.data.get('last_name'):
+                user.last_name = request.data['last_name']
+                
+            user.save()
+            
+            if request.data.get('profile_pic'):
+                profile.profile_pic = request.data['profile_pic']
+                
+            if request.data.get('bio'):
+                profile.bio = request.data['bio']
+            
+            if request.data.get('github'):
+                profile.github = request.data['github']
+                
+            if request.data.get('linkedin'):
+                profile.linkedin = request.data['linkedin']
+                
+            if request.data.get('twitter'):
+                profile.twitter = request.data['twitter']
+                
+            if request.data.get('website'):
+                profile.website = request.data['website']
+                
+            profile.save()
+            
+            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
 class RegisterUser(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer

@@ -11,21 +11,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         
 class UserSerializer(serializers.ModelSerializer):    
     projects = ProjectSerializer(many=True, read_only=True)
-    profile = ProfileSerializer()
+    profile = ProfileSerializer(read_only=True)
     
     class Meta:
         model = User
-        fields = ['id','username', 'first_name', 'last_name','profile','projects']
-        
-    def update(self, instance, validated_data):
-        if 'profile' in validated_data:
-            profile_data = validated_data.pop('profile')
-            profile = instance.profile
-            profile_serializer = ProfileSerializer(profile, data=profile_data, partial=True)
-            if profile_serializer.is_valid():
-                profile_serializer.save()
-            
-        return super().update(instance, validated_data)
+        fields = ['id','username', 'first_name', 'last_name','profile','projects']        
+    
         
 class RegisterUserSerializer(serializers.ModelSerializer):
     
