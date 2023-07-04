@@ -2,12 +2,11 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from devexpo.settings import base
 
 def main():
     """Run administrative tasks."""
     
-    if base.DEBUG:
+    if os.environ.get('DEBUG'):
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'devexpo.settings.local')
     else:
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'devexpo.settings.production')
