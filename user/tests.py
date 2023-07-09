@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import Profile
 from django.urls import reverse
 from rest_framework_simplejwt.tokens import RefreshToken
+import json
 
 class RegestrationTestCase(APITestCase):
     
@@ -116,7 +117,9 @@ class ProfileTestCase(APITestCase):
         self.api_authentication()
         
         data = {
-            "bio" : "This is a test bio",
+            "first_name" : "test",
+            "last_name" : "case",
+            "bio" : "This is a updated test bio",
             "github" : "https://github.com/dummygithub",
             "linkedin" : "https://linkedin.com/dummylinkedin",
             "twitter" : "https://twitter.com/dummytwitter",
@@ -126,7 +129,24 @@ class ProfileTestCase(APITestCase):
         response = self.client.patch(reverse("profile-update",kwargs={"username": self.user.username}), data)
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+        
+        self.assertEqual(json.loads(response.content),
+                         {
+                            "id" : self.user.id,
+                            "username": "testcase",
+                            "first_name" : "test",
+                            "last_name" : "case",
+                            "profile" : {
+                                "bio" : "This is a updated test bio",
+                                "github" : "https://github.com/dummygithub",
+                                "linkedin" : "https://linkedin.com/dummylinkedin",
+                                "twitter" : "https://twitter.com/dummytwitter",
+                                "website" : "dummywebsite.com",
+                                "profile_pic" : "https://res.cloudinary.com/dvj784usp/image/upload/v1687582654/profiles/user-default.jpg"
+                            },
+                            "projects" : []
+                         })
+         
 class LogoutTestCase(APITestCase):
     
     def setUp(self):
