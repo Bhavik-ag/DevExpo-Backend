@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import (ProfileDetail, RegisterUser, CustomTokenObtainPairView, CustomTokenRefreshView, CustomTokenVerifyView, LogoutUser, ProfileUpdate)
 
+from .views import (CustomTokenObtainPairView, CustomTokenRefreshView,
+                    CustomTokenVerifyView, LogoutUser, ProfileDetail,
+                    ProfileUpdate, RegisterUser)
 
 urlpatterns = [
     path('profile/<str:username>/', ProfileDetail.as_view(), name='profile-detail'),

@@ -1,21 +1,18 @@
-from rest_framework import generics
-from django.contrib.auth.models import User
 from django.conf import settings
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from rest_framework import generics, status
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
-from rest_framework import status
-
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView
-)
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView, TokenVerifyView)
 
 from user.models import Profile
-from .serializers import UserSerializer, RegisterUserSerializer
-from .permissions import IsProfileOwnerOrReadOnly, IsProfileUserOrReadOnly
+
+from .permissions import IsProfileOwner, IsProfileUserOrReadOnly
+from .serializers import RegisterUserSerializer, UserSerializer
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -90,9 +87,13 @@ class ProfileDetail(generics.RetrieveDestroyAPIView):
     
 class ProfileUpdate(APIView):   
     parser_classes = [MultiPartParser, FormParser]
-    permission_classes = [IsProfileOwnerOrReadOnly]
+    permission_classes = [IsProfileOwner]
 
     def patch(self, request, username, format=None):
+        
+        if request.user != User.objects.get(username=username):
+            return Response({'error': 'You are not authorized to perform this action'}, status=status.HTTP_401_UNAUTHORIZED)
+        
         user = User.objects.get(username=username)
         profile = Profile.objects.get(user=user)
         
@@ -126,7 +127,7 @@ class ProfileUpdate(APIView):
                 
             profile.save()
             
-            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+            return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
         
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)

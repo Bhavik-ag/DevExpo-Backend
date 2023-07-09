@@ -1,7 +1,10 @@
-from rest_framework import serializers
-from .models import Project, Review
-from user.models import Profile
 from django.contrib.auth.models import User
+from rest_framework import serializers
+
+from user.models import Profile
+
+from .models import Project, Review
+
 
 class ContributorSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,15 +1,16 @@
-from rest_framework import generics
-from rest_framework.response import Response
+from rest_framework import generics, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .models import Project, Review
-from .serializers import ProjectSerializer, ProjectDetailSerializer, ReviewSerializer
 from .permissions import IsProjectUserOrReadOnly
+from .serializers import (ProjectDetailSerializer, ProjectSerializer,
+                          ReviewSerializer)
+
 
 class ProjectList(generics.ListAPIView):
     queryset = Project.objects.all()
