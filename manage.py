@@ -3,14 +3,15 @@
 import os
 import sys
 
+
 def main():
     """Run administrative tasks."""
-    
-    if os.environ.get('DEBUG'):
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'devexpo.settings.local')
+
+    if os.environ.get("DEBUG"):
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "devexpo.settings.local")
     else:
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'devexpo.settings.production')
-        
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "devexpo.settings.production")
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -22,5 +23,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

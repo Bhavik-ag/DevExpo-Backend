@@ -4,25 +4,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('description', models.TextField(max_length=250)),
-                ('demo_link', models.URLField(max_length=100)),
-                ('repo_link', models.URLField(max_length=100)),
-                ('views', models.IntegerField(default=0)),
-                ('likes', models.IntegerField(default=0)),
-                ('image_1', models.FileField(blank=True, upload_to='project_images')),
-                ('created', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("description", models.TextField(max_length=250)),
+                ("demo_link", models.URLField(max_length=100)),
+                ("repo_link", models.URLField(max_length=100)),
+                ("views", models.IntegerField(default=0)),
+                ("likes", models.IntegerField(default=0)),
+                ("image_1", models.FileField(blank=True, upload_to="project_images")),
+                ("created", models.DateTimeField(auto_now_add=True)),
             ],
         ),
     ]

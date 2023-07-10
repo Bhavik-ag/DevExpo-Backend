@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Project, Review
 
 # Register your models here.

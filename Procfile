@@ -1,1 +1,1 @@
-web: gunicorn devexpo.wsgi --log-file - 
+web: gunicorn devexpo.wsgi --log-file -
